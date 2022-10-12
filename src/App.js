@@ -1,11 +1,11 @@
-import './App.css';
 import ContactList from './components/ContactList';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <div className="App">
-      <div className="container">
-        <h1 className="title">My Contacts</h1>
+      <Navbar/>
+      <div className='content'>
         <ContactList />
       </div>
     </div>
