@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const ContactList = () => {
   const [contacts, setContacts] = useState(null);
+<<<<<<< Updated upstream
 
   const getQuestion = async () => {
     await axios
@@ -31,6 +32,34 @@ const ContactList = () => {
           alert('Post deleted!');
           setContacts(newContacts);
         }
+=======
+  
+  const getQuestion = async (signal) => {
+    await axios.get(
+      'http://ototbwebapp-env-2.eba-h8xavamx.ap-southeast-1.elasticbeanstalk.com/api/contacts', signal
+    ).then((res) => {
+      const contacts = res.data.data;
+      setContacts(contacts);
+    }).catch(err=> {
+        console.log(err.message);
+    })
+  }
+
+  useEffect(() => {
+    const abortCont = new AbortController();
+    getQuestion({signal: abortCont.signal});
+
+    return () => abortCont.abort();
+  }, [])
+
+  const handleDelete = async (id) => {
+      axios
+      .delete('http://ototbwebapp-env-2.eba-h8xavamx.ap-southeast-1.elasticbeanstalk.com/api/contacts/'+ id)
+      .then(() => {
+        alert("Post deleted!");
+      }).catch(err=> {
+        console.log(err.message);
+>>>>>>> Stashed changes
       });
   };
 
