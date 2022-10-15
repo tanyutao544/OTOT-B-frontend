@@ -46,7 +46,7 @@ const ContactList = () => {
           <div className="contact-preview" key = {contact._id}> 
             <Link to={`/contacts/${contact._id}`}>
               <h2>{contact.name}</h2>
-              <p>{contact.email} {contact.phone}</p>
+              <p>{contact.email} {contact.phone} {contact.gender}</p>
               <button onClick={() => handleDelete(contact._id)}>delete contact</button>
             </Link>
           </div>

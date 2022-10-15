@@ -5,6 +5,10 @@ import axios from "axios";
 const ContactDetails = () => {
     const { id } = useParams()
     const [contact, setContact] = useState(null);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [gender, setGender] = useState(''); 
     
     const getQuestion = async (signal) => {
         await axios.get(
@@ -12,9 +16,26 @@ const ContactDetails = () => {
           ).then((res) => {
             const contact = res.data.data;
             setContact(contact);
+            setName(contact.name);
+            setEmail(contact.email);
+            setGender(contact.gender);
+            contact.phone && setPhone(contact.phone);
           }).catch(err=> {
               console.log(err.message);
           })
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const contact = {name, email, phone, gender};
+        await axios.patch('http://ototbwebapp-env-2.eba-h8xavamx.ap-southeast-1.elasticbeanstalk.com/api/contacts/'+id, contact)
+        .then((res) => {
+            if (res.status === 200) {
+              alert('contact updated!');
+            } else {
+                console.log(res.data.message)
+            }
+        })
     }
 
     useEffect(() => {
@@ -28,13 +49,38 @@ const ContactDetails = () => {
     return null;
 
     return (
-        <div className="contact-preview">
-            <div>
-                <h2>{contact.name}</h2>
-                <p>{contact.email}</p>
-                <p>{contact.phone}</p>
-                <p>{contact.gender}</p>
-            </div>
+        <div className="create">
+            <form onSubmit={handleSubmit}>
+                <label>Contact Name:</label>
+                <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+                <label>Contact email:</label>
+                <input
+                    type="text"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <label>Contact phone:</label>
+                <input
+                    type="text"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                />
+                <label>Contact gender:</label>
+                <select
+                    value = {gender}
+                    onChange={(e) => setGender(e.target.value)}
+                >
+                    <option value="male">male</option>
+                    <option value="female">female</option>
+                </select>
+                <button>Update Contact</button>
+            </form>
         </div>
     );
 }
