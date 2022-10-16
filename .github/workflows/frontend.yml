@@ -41,7 +41,7 @@ jobs:
           flags: 'g'
 
       - name: Beanstalk Deploy for app
-        uses: einaregilsson/beanstalk-deploy@v10
+        uses: einaregilsson/beanstalk-deploy@v20
         with:
           aws_access_key: ${{secrets.AWS_ACCESS_REACT_KEY_ID}}
           aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_REACT_KEY}}
