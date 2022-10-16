@@ -2,10 +2,10 @@ name: frontend
 
 on:
   push:
-    branches: [ dev, master ]
+    branches: [dev, master]
   pull_request:
-    branches: [ master ]
-    
+    branches: [master]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,46 +14,42 @@ jobs:
         node-version: [16.x]
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
-// In this step I am renaming my static main.js file by removing the auto-added hash from its name 
-    - name: rename main js
-      run: mv build/static/js/main.*.*.js build/static/js/main.js
-      
-// Creating my deployment package and compressing it into a zip file   
-    - name: Generate deployment package
-      run: zip -r deploy.zip * -x "**node_modules**"
+      - name: rename main js
+        run: mv build/static/js/main.*.*.js build/static/js/main.js
 
-    - name: Get timestamp
-      uses: gerred/actions/current-time@master
-      id: current-time
+      - name: Generate deployment package
+        run: zip -r deploy.zip * -x "**node_modules**"
 
-    - name: Run string replace
-      uses: frabert/replace-string-action@master
-      id: format-time
-      with:
-        pattern: '[:\.]+'
-        string: "${{ steps.current-time.outputs.time }}"
-        replace-with: '-'
-        flags: 'g'
+      - name: Get timestamp
+        uses: gerred/actions/current-time@master
+        id: current-time
 
-// Now, its time to deploy our package to Beanstalk that we've configured earlier, to deploy our app we need Secret keys that we can get from the AWS user, every user has separate keys on AWS. 
+      - name: Run string replace
+        uses: frabert/replace-string-action@master
+        id: format-time
+        with:
+          pattern: '[:\.]+'
+          string: '${{ steps.current-time.outputs.time }}'
+          replace-with: '-'
+          flags: 'g'
 
-    - name: Beanstalk Deploy for app
-      uses: einaregilsson/beanstalk-deploy@v10
-      with:
-        aws_access_key: ${{secrets.AWS_ACCESS_REACT_KEY_ID}}
-        aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_REACT_KEY}}
-        application_name: "OTOT_B_WEBAPP_FRONTEND"
-        environment_name: "Ototbwebappfrontend-env"
-        region: "ap-southeast-1"
-        version_label: "react-contact-frontend-${{ steps.format-time.outputs.replaced }}"
-        deployment_package: deploy.zip
+      - name: Beanstalk Deploy for app
+        uses: einaregilsson/beanstalk-deploy@v10
+        with:
+          aws_access_key: ${{secrets.AWS_ACCESS_REACT_KEY_ID}}
+          aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_REACT_KEY}}
+          application_name: 'OTOT_B_WEBAPP_FRONTEND'
+          environment_name: 'Ototbwebappfrontend-env'
+          region: 'ap-southeast-1'
+          version_label: 'react-contact-frontend-${{ steps.format-time.outputs.replaced }}'
+          deployment_package: deploy.zip
 
-    - name: Deployed!
-      run: echo App deployed to ELB
+      - name: Deployed!
+        run: echo App deployed to ELB
