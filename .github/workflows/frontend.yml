@@ -1,5 +1,5 @@
 // specify the name of your project
-name: React contacts frontend
+name: React frontend deployment
 
 // Configure what events and branches you want to trigger your pipeline on, in this case I want it to be trgiggered when I push the code in react-profile branch
 on:
