@@ -11,7 +11,7 @@ const ContactDetails = () => {
   const [gender, setGender] = useState('');
   const navigate = useNavigate();
 
-  const getQuestion = async (signal) => {
+  const getContacts = async (signal) => {
     await axios
       .get(
         'http://ototbwebapp-env-2.eba-h8xavamx.ap-southeast-1.elasticbeanstalk.com/api/contacts/' +
@@ -52,7 +52,7 @@ const ContactDetails = () => {
 
   useEffect(() => {
     const abortCont = new AbortController();
-    getQuestion({ signal: abortCont.signal });
+    getContacts({ signal: abortCont.signal });
 
     return () => abortCont.abort();
   }, []);
