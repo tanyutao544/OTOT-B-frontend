@@ -55,6 +55,7 @@ const ContactDetails = () => {
     getContacts({ signal: abortCont.signal });
 
     return () => abortCont.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!contact) return null;
