@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const ContactList = () => {
   const [contacts, setContacts] = useState(null);
   
-  const getQuestions = async (signal) => {
+  const getContacts = async (signal) => {
     await axios.get(
       'http://ototbwebapp-env-2.eba-h8xavamx.ap-southeast-1.elasticbeanstalk.com/api/contacts', signal
     ).then((res) => {
@@ -18,7 +18,7 @@ const ContactList = () => {
 
   useEffect(() => {
     const abortCont = new AbortController();
-    getQuestions({signal: abortCont.signal});
+    getContacts({signal: abortCont.signal});
 
     return () => abortCont.abort();
   }, [])

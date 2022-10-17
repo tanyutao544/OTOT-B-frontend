@@ -1,4 +1,4 @@
-name: frontend
+name: Development workflow
 
 on:
   push:
@@ -7,49 +7,21 @@ on:
     branches: [master]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Development Code
+        uses: actions/checkout@v2
+      - name: Use Node.js 17.x
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: rename main js
-        run: mv build/static/js/main.*.js build/static/js/main.js
-
-      - name: Generate deployment package
-        run: zip -r deploy.zip * -x "**node_modules**"
-
-      - name: Get timestamp
-        uses: gerred/actions/current-time@master
-        id: current-time
-
-      - name: Run string replace
-        uses: frabert/replace-string-action@master
-        id: format-time
+          node-version: 17.x
+      - run: npm install
+      - run: npm run build --if-present
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          pattern: '[:\.]+'
-          string: '${{ steps.current-time.outputs.time }}'
-          replace-with: '-'
-          flags: 'g'
-
-      - name: Beanstalk Deploy for app
-        uses: einaregilsson/beanstalk-deploy@v20
-        with:
-          aws_access_key: ${{secrets.AWS_ACCESS_REACT_KEY_ID}}
-          aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_REACT_KEY}}
-          application_name: 'OTOT_B_WEBAPP_FRONTEND'
-          environment_name: 'Ototbwebappfrontend-env'
-          region: 'ap-southeast-1'
-          version_label: 'react-contact-frontend-${{ steps.format-time.outputs.replaced }}'
-          deployment_package: deploy.zip
-
-      - name: Deployed!
-        run: echo App deployed to ELB
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: 'otot-b-react-frontend'
+          heroku_email: 'tanyutao913@gmail.com'
