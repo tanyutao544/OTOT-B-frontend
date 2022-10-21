@@ -31,6 +31,23 @@ const ContactDetails = () => {
       });
   };
 
+  const handleDelete = async (id) => {
+    axios
+      .delete(
+        'http://ototbwebapp-env-2.eba-h8xavamx.ap-southeast-1.elasticbeanstalk.com/api/contacts/' +
+          id
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          alert('Contact deleted!');
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const contact = { name, email, phone, gender };
@@ -43,10 +60,10 @@ const ContactDetails = () => {
       .then((res) => {
         if (res.status === 200) {
           alert('contact updated!');
+          navigate('/');
         } else {
           console.log(res.data.message);
         }
-        navigate('/');
       });
   };
 
@@ -89,6 +106,7 @@ const ContactDetails = () => {
           <option value="female">female</option>
         </select>
         <button>Update Contact</button>
+        <button onClick={() => handleDelete(id)}>delete contact</button>
       </form>
     </div>
   );
