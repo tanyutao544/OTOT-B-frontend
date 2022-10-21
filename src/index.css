@@ -3,7 +3,7 @@
 /* base styles */
 * {
   margin: 0;
-  font-family: "Quicksand";
+  font-family: 'Quicksand';
   color: #333;
 }
 .navbar {
@@ -33,14 +33,14 @@
   margin: 40px auto;
   padding: 20px;
 }
-/* blog previews / list */
+/* contacts previews / list */
 .contact-preview {
   padding: 10px 16px;
   margin: 20px 0;
   border-bottom: 1px solid #fafafa;
 }
 .contact-preview:hover {
-  box-shadow: 1px 3px 5px rgba(0,0,0,0.1);
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
 }
 .contact-preview h2 {
   font-size: 20px;
@@ -48,7 +48,7 @@
   margin-bottom: 8px;
 }
 
-/* create new blog form */
+/* create new Contact form */
 .create {
   max-width: 400px;
   margin: 0 auto;
@@ -63,7 +63,9 @@
   color: #f1356d;
   margin-bottom: 30px;
 }
-.create input, .create textarea, .create select {
+.create input,
+.create textarea,
+.create select {
   width: 100%;
   padding: 6px 10px;
   margin: 10px 0;
@@ -78,4 +80,25 @@
   padding: 8px;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.menu {
+  position: absolute;
+
+  list-style-type: none;
+  margin: 5px 0;
+  padding: 0;
+
+  border: 1px solid grey;
+  width: 200px;
+}
+
+.period {
+  margin: 0;
+
+  background-color: white;
+}
+
+.period:hover {
+  background-color: lightgray;
 }
